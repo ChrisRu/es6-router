@@ -1,0 +1,37 @@
+{
+  "name": "es6-router",
+  "version": "1.0.0",
+  "description": "Simple ES6 client side router",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "jest": "^20.0.4",
+    "babel-jest": "^20.0.3",
+    "babel-preset-env": "^1.5.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisRu/es6-router.git"
+  },
+  "keywords": [
+    "simple",
+    "router",
+    "routes",
+    "client",
+    "clientside",
+    "es6-router",
+    "es6-routes",
+    "es6"
+  ],
+  "author": "Christian Ruigrok",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChrisRu/es6-router/issues"
+  },
+  "homepage": "https://github.com/ChrisRu/es6-router#readme"
+}

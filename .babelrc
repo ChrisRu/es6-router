@@ -1,0 +1,14 @@
+{
+	"presets": [
+		[
+			"env"
+		]
+	],
+	"env": {
+		"test": {
+			"presets": [
+				"env"
+			]
+		}
+	}
+}
