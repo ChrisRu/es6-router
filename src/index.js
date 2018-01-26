@@ -39,7 +39,7 @@ export default class Router {
         return this;
       }
     }
-    this.navigateError();
+    this.navigateError(hash);
     return this;
   }
 
@@ -62,7 +62,7 @@ export default class Router {
     return this;
   }
 
-  navigateError() {
+  navigateError(hash) {
     if (this.debug) {
       console.log(`%c[Router] Failed %cFetching: /${hash}, not a valid route.`, 'color: rgb(255, 105, 100);', 'color: inherit');
     }
