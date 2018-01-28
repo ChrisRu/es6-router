@@ -1,82 +1,171 @@
+const log = message => {
+  console.log(
+    `%c[Router]%c ${message}`,
+    'color: rgb(255, 105, 100);',
+    'color: inherit'
+  );
+};
+
+/**
+ * Client side router with hash history
+ */
 export default class Router {
-  constructor(debug = false) {
+  /**
+   * Create a new instance of a client side router
+   * @param {boolean} [debug=false] - Enable debugging console messages
+   * @param {boolean} [context=Window] - Context to listen for changes on
+   */
+  constructor(debug = false, context) {
     this.debug = debug;
     this.routes = [];
+    this.listen(context);
   }
 
-  add(re, handler) {
-    re = Router.cleanHash(re);
+  /**
+   * Add a new route
+   * @param {string|RegExp} route - Name of route to match
+   * @param {function} handler - Method to execute when route matches
+   * @returns {Router} - This router instance
+   */
+  add(route, handler) {
+    let newRoute = Router.cleanPath(route);
 
-    if (typeof re === 'function') {
-      handler = re;
-      re = new RegExp('');
-    } else if (typeof re === 'string') {
-      re = new RegExp(re);
+    if (typeof route === 'function') {
+      handler = route;
+      newRoute = '';
     }
 
+    newRoute = new RegExp(newRoute);
+
     this.routes = this.routes.concat({
-      re,
+      route: newRoute,
       handler
     });
+
     return this;
   }
 
-  remove(re) {
-    this.routes = this.routes.filter(route => route.re === re);
+  /**
+   * Remove a route from the router
+   * @param {string|RegExp} route - Name of route to remove
+   * @param {function} [handler] - Function handler to remove
+   * @returns {Router} - This router instance
+   */
+  remove(route, handler) {
+    const routeName = String(new RegExp(route));
+
+    this.routes = this.routes.filter(
+      activeRoute =>
+        String(new RegExp(activeRoute.route)) !== routeName ||
+        (handler ? activeRoute.handler !== handler : false)
+    );
+
+    return this;
   }
 
+  /**
+   * Reload the current route
+   * @returns {Router} - This router instance
+   */
+  reload() {
+    return this.check();
+  }
+
+  /**
+   * Recheck the path and reload the page
+   * @returns {Router} - This router instance
+   */
   check() {
-    const hash = Router.cleanHash(location.hash);
+    const hash = this.currentRoute;
 
     for (let route of this.routes) {
-      const match = hash.match(route.re);
+      const match = hash.match(route.route);
+
       if (match !== null && match[0] === hash) {
         match.shift();
         route.handler.apply({}, match);
+
         if (this.debug) {
-          console.log(`%c[Router] %cFetching: /${hash}`, 'color: rgb(255, 105, 100);', 'color: inherit');
+          log(`Fetching: /${hash}`);
         }
+
         return this;
       }
     }
+
     this.navigateError(hash);
     return this;
   }
 
-  listen() {
+  /**
+   * Start listening for hash changes on the window
+   * @param {any} [instance=Window] - Context to start listening on
+   * @returns {Router} - This router instance
+   */
+  listen(instance) {
     this.check();
-    window.addEventListener('hashchange', () => this.check());
+    (instance || window).addEventListener('hashchange', () => this.check());
     return this;
   }
 
-  stopListen() {
-    window.removeEventListener('hashchange', () => this.check());
+  /**
+   * Stop listening for hash changes on the window
+   * @param {any} [instance=Window] - Context to stop listening on
+   * @returns {Router} - This router instance
+   */
+  stopListen(instance) {
+    (instance || window).removeEventListener('hashchange', () => this.check());
     return this;
   }
 
+  /**
+   * Navigate router to path
+   * @param {string} path - Path to navigate the router to
+   * @returns {Router} - This router instance
+   */
   navigate(path) {
     if (this.debug) {
-      console.log(`%c[Router] %cRedirecting to: /${Router.cleanHash(path || '')}`, 'color: rgb(255, 105, 100);', 'color: inherit');
+      log(`Redirecting to: /${Router.cleanPath(path || '')}`);
     }
-    history.pushState(null, null, '#/' + Router.cleanHash(path || ''));
+
+    history.pushState(null, null, '#/' + Router.cleanPath(path || ''));
+
     return this;
   }
 
+  /**
+   * Navigate to the error page
+   * @param {string} hash
+   * @returns {Router} - This router instance
+   */
   navigateError(hash) {
     if (this.debug) {
-      console.log(`%c[Router] Failed %cFetching: /${hash}, not a valid route.`, 'color: rgb(255, 105, 100);', 'color: inherit');
+      log(`Fetching: /${hash}, not a valid route.`);
     }
+
     this.navigate('error');
+
+    return this;
   }
 
-  get currentPage() {
-    return Router.cleanHash(location.hash);
+  /**
+   * Name of the current route
+   * @returns {string} - Current route
+   */
+  get currentRoute() {
+    return Router.cleanPath(window.location.hash);
   }
 
-  static cleanHash(path) {
-    if (path === undefined) {
+  /**
+   * Strip the path of slashes and hashes
+   * @param {string} path - Path to clean of hashes
+   * @returns {string} - Cleaned path
+   */
+  static cleanPath(path) {
+    if (!path) {
       return '';
     }
+
     return path.toString().replace(/^#+\/+|^\/+#+|^\/+|^#+|\/+$|\?(.*)$/g, '');
   }
 }
