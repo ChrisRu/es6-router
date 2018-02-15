@@ -18,6 +18,7 @@ export default class Router {
   constructor(debug = false, context) {
     this.debug = debug;
     this.routes = [];
+    this.onHashChange = this.check.bind(this);
     this.listen(context);
   }
 
@@ -104,7 +105,7 @@ export default class Router {
    */
   listen(instance) {
     this.check();
-    (instance || window).addEventListener('hashchange', () => this.check());
+    (instance || window).addEventListener('hashchange', this.onHashChange);
     return this;
   }
 
@@ -114,7 +115,7 @@ export default class Router {
    * @returns {Router} - This router instance
    */
   stopListen(instance) {
-    (instance || window).removeEventListener('hashchange', () => this.check());
+    (instance || window).removeEventListener('hashchange', this.onHashChange);
     return this;
   }
 
