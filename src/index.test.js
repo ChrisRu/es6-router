@@ -107,3 +107,36 @@ test('Reload', () => {
 
   expect(i).toEqual(3);
 });
+
+test('StopListen', () => {
+  const router = new Router(false, false);
+
+  let i = 0;
+
+  router.add('home', () => {
+    i = 1
+  });
+  router.add('last', () => {
+    i = 2;
+  });
+
+  Object.defineProperty(window.location, 'hash', {
+    writable: true,
+    value: '#/home'
+  });
+  const homeHashChangeEvent = new Event('hashchange');
+  window.dispatchEvent(homeHashChangeEvent);
+
+  expect(i).toEqual(1);
+
+  router.stopListen();
+
+  Object.defineProperty(window.location, 'hash', {
+    writable: true,
+    value: '#/last'
+  });
+  const lastHashChangeEvent = new Event('hashchange');
+  window.dispatchEvent(lastHashChangeEvent);
+
+  expect(i).toEqual(1);
+});
