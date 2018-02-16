@@ -18,7 +18,7 @@ export default class Router {
    * @param {boolean} [options.startListening=true] - Initiate listen on construct
    */
   constructor(options) {
-    options = Object.assign(
+    this.options = Object.assign(
       {
         debug: false,
         context: window,
@@ -31,10 +31,8 @@ export default class Router {
     this.routes = [];
     this.onHashChange = this.check.bind(this);
 
-    this.debug = options.debug;
-    this.context = options.context;
-    if (options.startListening) {
-      this.listen(this.context);
+    if (this.options.startListening) {
+      this.listen();
     }
   }
 
@@ -102,7 +100,7 @@ export default class Router {
         match.shift();
         route.handler.apply({}, match);
 
-        if (this.debug) {
+        if (this.options.debug) {
           log(`Fetching: /${hash}`);
         }
 
@@ -123,7 +121,7 @@ export default class Router {
     this.check();
 
     if (!this.isListening) {
-      (instance || this.context || window).addEventListener(
+      (instance || this.options.context || window).addEventListener(
         'hashchange',
         this.onHashChange
       );
@@ -141,7 +139,7 @@ export default class Router {
    */
   stopListen(instance) {
     if (this.isListening) {
-      (instance || this.context || window).removeEventListener(
+      (instance || this.options.context || window).removeEventListener(
         'hashchange',
         this.onHashChange
       );
@@ -158,7 +156,7 @@ export default class Router {
    * @returns {Router} - This router instance
    */
   navigate(path) {
-    if (this.debug) {
+    if (this.options.debug) {
       log(`Redirecting to: /${Router.cleanPath(path || '')}`);
     }
 
@@ -173,7 +171,7 @@ export default class Router {
    * @returns {Router} - This router instance
    */
   navigateError(hash) {
-    if (this.debug) {
+    if (this.options.debug) {
       log(`Fetching: /${hash}, not a valid route.`);
     }
 
