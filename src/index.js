@@ -18,17 +18,21 @@ export default class Router {
    * @param {boolean} [options.startListening=true] - Initiate listen on construct
    */
   constructor(options) {
-    options = Object.assign({
-      debug: false,
-      context: window,
-      startListening: true
-    }, options);
+    options = Object.assign(
+      {
+        debug: false,
+        context: window,
+        startListening: true
+      },
+      options
+    );
 
-    this.debug = options.debug;
+    this.isListening = false;
     this.routes = [];
     this.onHashChange = this.check.bind(this);
+
+    this.debug = options.debug;
     this.context = options.context;
-    
     if (options.startListening) {
       this.listen(this.context);
     }
@@ -117,7 +121,16 @@ export default class Router {
    */
   listen(instance) {
     this.check();
-    (instance || this.context || window).addEventListener('hashchange', this.onHashChange);
+
+    if (!this.isListening) {
+      (instance || this.context || window).addEventListener(
+        'hashchange',
+        this.onHashChange
+      );
+
+      this.isListening = true;
+    }
+
     return this;
   }
 
@@ -127,7 +140,15 @@ export default class Router {
    * @returns {Router} - This router instance
    */
   stopListen(instance) {
-    (instance || this.context || window).removeEventListener('hashchange', this.onHashChange);
+    if (this.isListening) {
+      (instance || this.context || window).removeEventListener(
+        'hashchange',
+        this.onHashChange
+      );
+
+      this.isListening = false;
+    }
+
     return this;
   }
 
