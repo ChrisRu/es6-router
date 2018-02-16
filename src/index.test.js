@@ -3,27 +3,91 @@ import Router from './index';
 test('Simple routing setup', () => {
   const router = new Router();
 
-  router
-    .add(() => {})
-    .add('home', () => {});
+  router.add(() => {}).add('home', () => {});
 
   window.location.hash = 'home';
 
   expect(router.currentRoute).toEqual('home');
 });
 
-test('Simple routing setup with navigate', () => {
+test('Simple routing setup event', () => {
+  const router = new Router();
+  let i = false;
+
+  router.add(() => {}).add('home', () => {
+    i = true;
+  });
+
+  window.history.pushState(null, null, '#/home');
+  window.dispatchEvent(new Event('hashchange'));
+
+  expect(i).toEqual(true);
+});
+
+test('Simple routing setup regex', () => {
+  const router = new Router();
+  let i = false;
+
+  router.add(() => {}).add(/[a-z]-test/, () => {
+    i = true;
+  });
+
+  window.location.hash = 'd-test';
+  router.reload();
+
+  expect(i).toEqual(true);
+});
+
+test('Simple routing setup regex negative', () => {
   const router = new Router();
 
+  let i = false;
+
+  router.add(() => {}).add(/[a-z]-test/, () => {
+    i = true;
+  });
+
+  window.location.hash = '1-test';
+  router.reload();
+
+  expect(i).toEqual(false);
+
+  router.stopListen();
+});
+
+test('Simple routing setup with navigate', () => {
+  const router = new Router();
+  let i = 0;
+
   router
-    .add(() => {})
-    .add('home', () => {});
+    .add('testnav', () => {
+      i = 1;
+    })
+    .add('homenav', () => {
+      i = 2;
+    });
 
-  window.location.hash = 'home';
+  window.location.hash = 'homenav';
+  router.reload();
 
-  router.navigate('');
+  expect(i).toEqual(2);
 
-  expect(router.currentRoute).toEqual('');
+  router.navigate('testnav');
+
+  expect(i).toEqual(1);
+});
+
+test('Routing global', () => {
+  const router = new Router();
+  let i = false;
+
+  router.add(() => {
+    i = true;
+  });
+
+  router.reload();
+
+  expect(i).toEqual(true);
 });
 
 test('Routing add', () => {
@@ -96,7 +160,6 @@ test('Reload', () => {
   router.add('last', () => {
     i = 3;
   });
-
   window.location.hash = '/last';
 
   expect(i).toEqual(0);
@@ -106,15 +169,12 @@ test('Reload', () => {
   expect(i).toEqual(3);
 });
 
-
-
-test('StopListen', () => {
+test('Stop listening', () => {
   const router = new Router();
-
   let i = 0;
 
   router.add('home', () => {
-    i = 1
+    i = 1;
   });
   router.add('last', () => {
     i = 2;
@@ -124,8 +184,8 @@ test('StopListen', () => {
     writable: true,
     value: '#/home'
   });
-  const homeHashChangeEvent = new Event('hashchange');
-  window.dispatchEvent(homeHashChangeEvent);
+
+  window.dispatchEvent(new Event('hashchange'));
 
   expect(i).toEqual(1);
 
@@ -135,16 +195,16 @@ test('StopListen', () => {
     writable: true,
     value: '#/last'
   });
-  const lastHashChangeEvent = new Event('hashchange');
-  window.dispatchEvent(lastHashChangeEvent);
+
+  window.dispatchEvent(new Event('hashchange'));
 
   expect(i).toEqual(1);
 });
 
 test('Do not init listen on construct', () => {
+  const router = new Router({ startListening: false });
   let i = 0;
 
-  const router = new Router({ startListening: false });
   router.add(() => {
     i = 1;
   });
@@ -153,8 +213,8 @@ test('Do not init listen on construct', () => {
     writable: true,
     value: '#/'
   });
-  const firstHashChangeEvent = new Event('hashchange');
-  window.dispatchEvent(firstHashChangeEvent);
+
+  window.dispatchEvent(new Event('hashchange'));
 
   expect(i).toEqual(0);
 
@@ -164,8 +224,12 @@ test('Do not init listen on construct', () => {
     writable: true,
     value: '#/'
   });
-  const lastHashChangeEvent = new Event('hashchange');
-  window.dispatchEvent(lastHashChangeEvent);
+
+  window.dispatchEvent(new Event('hashchange'));
 
   expect(i).toEqual(1);
+});
+
+test('Parse url', () => {
+  expect(Router.parseRoute('#/test/1/5')).toEqual(['test', '1', '5']);
 });

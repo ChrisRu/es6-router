@@ -92,36 +92,39 @@ export default class Router {
    */
   check() {
     const hash = this.currentRoute;
+    let hasMatch = false;
 
     for (let route of this.routes) {
       const match = hash.match(route.route);
 
-      if (match !== null && match[0] === hash) {
+      if (match !== null) {
         match.shift();
         route.handler.apply({}, match);
+        hasMatch = true;
 
         if (this.options.debug) {
           log(`Fetching: /${hash}`);
         }
-
-        return this;
       }
     }
 
-    this.navigateError(hash);
+    if (!hasMatch) {
+      this.navigateError(hash);
+    }
+
     return this;
   }
 
   /**
-   * Start listening for hash changes on the window
+   * Start listening for hash changes on the context
    * @param {any} [instance=Window] - Context to start listening on
    * @returns {Router} - This router instance
    */
   listen(instance) {
     this.check();
 
-    if (!this.isListening) {
-      (instance || this.options.context || window).addEventListener(
+    if (!this.isListening || instance) {
+      (instance || this.options.context).addEventListener(
         'hashchange',
         this.onHashChange
       );
@@ -133,13 +136,13 @@ export default class Router {
   }
 
   /**
-   * Stop listening for hash changes on the window
+   * Stop listening for hash changes on the context
    * @param {any} [instance=Window] - Context to stop listening on
    * @returns {Router} - This router instance
    */
   stopListen(instance) {
-    if (this.isListening) {
-      (instance || this.options.context || window).removeEventListener(
+    if (this.isListening || instance) {
+      (instance || this.options.context).removeEventListener(
         'hashchange',
         this.onHashChange
       );
@@ -160,7 +163,15 @@ export default class Router {
       log(`Redirecting to: /${Router.cleanPath(path || '')}`);
     }
 
-    history.pushState(null, null, '#/' + Router.cleanPath(path || ''));
+    this.options.context.history.pushState(
+      null,
+      null,
+      '#/' + Router.cleanPath(path || '')
+    );
+
+    if (path !== 'error') {
+      window.dispatchEvent(new Event('hashchange'));
+    }
 
     return this;
   }
@@ -185,7 +196,7 @@ export default class Router {
    * @returns {string} - Current route
    */
   get currentRoute() {
-    return Router.cleanPath(window.location.hash);
+    return Router.cleanPath(this.options.context.location.hash);
   }
 
   /**
@@ -198,6 +209,10 @@ export default class Router {
       return '';
     }
 
-    return path.toString().replace(/^#+\/+|^\/+#+|^\/+|^#+|\/+$|\?(.*)$/g, '');
+    return String(path).replace(/^#+\/+|^\/+#+|^\/+|^#+|\/+$|\?(.*)$/g, '');
+  }
+
+  static parseRoute(route) {
+    return Router.cleanPath(route).split('/');
   }
 }
