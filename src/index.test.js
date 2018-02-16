@@ -5,8 +5,7 @@ test('Simple routing setup', () => {
 
   router
     .add(() => {})
-    .add('home', () => {})
-    .listen();
+    .add('home', () => {});
 
   window.location.hash = 'home';
 
@@ -18,8 +17,7 @@ test('Simple routing setup with navigate', () => {
 
   router
     .add(() => {})
-    .add('home', () => {})
-    .listen();
+    .add('home', () => {});
 
   window.location.hash = 'home';
 
@@ -89,7 +87,7 @@ test('Routing remove multiple', () => {
 });
 
 test('Reload', () => {
-  const router = new Router(false, false);
+  const router = new Router();
 
   let i = 0;
 
@@ -109,7 +107,7 @@ test('Reload', () => {
 });
 
 test('StopListen', () => {
-  const router = new Router(false, false);
+  const router = new Router();
 
   let i = 0;
 
@@ -144,7 +142,7 @@ test('StopListen', () => {
 test('Do not init listen on construct', () => {
   let i = 0;
 
-  const router = new Router(false, window, false);
+  const router = new Router({ startListening: false });
   router.add(() => {
     i = 1;
   });
