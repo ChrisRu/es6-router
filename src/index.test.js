@@ -140,3 +140,32 @@ test('StopListen', () => {
 
   expect(i).toEqual(1);
 });
+
+test('Do not init listen on construct', () => {
+  let i = 0;
+
+  const router = new Router(false, window, false);
+  router.add(() => {
+    i = 1;
+  });
+
+  Object.defineProperty(window.location, 'hash', {
+    writable: true,
+    value: '#/'
+  });
+  const firstHashChangeEvent = new Event('hashchange');
+  window.dispatchEvent(firstHashChangeEvent);
+
+  expect(i).toEqual(0);
+
+  router.listen();
+
+  Object.defineProperty(window.location, 'hash', {
+    writable: true,
+    value: '#/'
+  });
+  const lastHashChangeEvent = new Event('hashchange');
+  window.dispatchEvent(lastHashChangeEvent);
+
+  expect(i).toEqual(1);
+});

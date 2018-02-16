@@ -14,12 +14,16 @@ export default class Router {
    * Create a new instance of a client side router
    * @param {boolean} [debug=false] - Enable debugging console messages
    * @param {boolean} [context=Window] - Context to listen for changes on
+   * @param {boolean} [initiate=true] - Initiate listen on construct
    */
-  constructor(debug = false, context) {
+  constructor(debug = false, context = window, initiate = true) {
     this.debug = debug;
     this.routes = [];
     this.onHashChange = this.check.bind(this);
-    this.listen(context);
+    this.context = context;
+    if (true === initiate) {
+      this.listen(this.context);
+    }
   }
 
   /**
@@ -105,7 +109,7 @@ export default class Router {
    */
   listen(instance) {
     this.check();
-    (instance || window).addEventListener('hashchange', this.onHashChange);
+    (instance || this.context || window).addEventListener('hashchange', this.onHashChange);
     return this;
   }
 
@@ -115,7 +119,7 @@ export default class Router {
    * @returns {Router} - This router instance
    */
   stopListen(instance) {
-    (instance || window).removeEventListener('hashchange', this.onHashChange);
+    (instance || this.context || window).removeEventListener('hashchange', this.onHashChange);
     return this;
   }
 
