@@ -12,16 +12,24 @@ const log = message => {
 export default class Router {
   /**
    * Create a new instance of a client side router
-   * @param {boolean} [debug=false] - Enable debugging console messages
-   * @param {boolean} [context=Window] - Context to listen for changes on
-   * @param {boolean} [initiate=true] - Initiate listen on construct
+   * @param {Object} options Router options
+   * @param {boolean} [options.debug=false] - Enable debugging console messages
+   * @param {Object} [options.context=window] - Context to listen for changes on
+   * @param {boolean} [options.startListening=true] - Initiate listen on construct
    */
-  constructor(debug = false, context = window, initiate = true) {
-    this.debug = debug;
+  constructor(options) {
+    options = Object.assign({
+      debug: false,
+      context: window,
+      startListening: true
+    }, options);
+
+    this.debug = options.debug;
     this.routes = [];
     this.onHashChange = this.check.bind(this);
-    this.context = context;
-    if (true === initiate) {
+    this.context = options.context;
+    
+    if (options.startListening) {
       this.listen(this.context);
     }
   }
