@@ -87,7 +87,7 @@ test('Routing remove multiple', () => {
 });
 
 test('Reload', () => {
-  const router = new Router();
+  const router = new Router({ startListening: false });
 
   let i = 0;
 
@@ -105,6 +105,8 @@ test('Reload', () => {
 
   expect(i).toEqual(3);
 });
+
+
 
 test('StopListen', () => {
   const router = new Router();
