@@ -141,6 +141,18 @@ Strip the path of slashes and hashes
 
 *Returns*: <code>string</code> - Cleaned path
 
+<hr>
+
+#### parseRoute(path) ⇒ <code>string</code>
+
+Parse a route URL to get all parts
+
+| Param | Type                | Description               |
+| ----- | ------------------- | ------------------------- |
+| path  | <code>string</code> | Route to split into parts |
+
+*Returns*: <code>string[]</code> - Parts of the url
+
 ## License
 
 MIT

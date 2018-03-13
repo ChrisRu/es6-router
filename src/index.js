@@ -214,10 +214,10 @@ export default class Router {
 
   /**
    * Parse a route URL to get all parts
-   * @param {string} route Route to split into parts
-   * @returns {string[]} Parts of the URL
+   * @param {string} route - Route to split into parts
+   * @returns {string[]} - Parts of the URL
    */
-  static parseRoute(route) {
-    return Router.cleanPath(route).split('/');
+  static parseRoute(path) {
+    return Router.cleanPath(path).split('/');
   }
 }
