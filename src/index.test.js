@@ -233,3 +233,7 @@ test('Do not init listen on construct', () => {
 test('Parse url', () => {
   expect(Router.parseRoute('#/test/1/5')).toEqual(['test', '1', '5']);
 });
+
+test('Parse url random slashes', () => {
+  expect(Router.parseRoute('#//^31/test/()/5/')).toEqual(['^31', 'test', '()', '5']);
+});
