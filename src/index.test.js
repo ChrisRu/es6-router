@@ -230,6 +230,18 @@ test('Do not init listen on construct', () => {
   expect(i).toEqual(1);
 });
 
+test('Clean path preceding content', () => {
+  expect(Router.cleanPath('#/#/test')).toEqual('test');
+});
+
+test('Clean path trailing slashes', () => {
+  expect(Router.cleanPath('#/test///')).toEqual('test');
+});
+
+test('Clean path remove querystring', () => {
+  expect(Router.cleanPath('#/test?rest=5&test=100')).toEqual('test');
+});
+
 test('Parse url', () => {
   expect(Router.parseRoute('#/test/1/5')).toEqual(['test', '1', '5']);
 });

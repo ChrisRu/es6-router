@@ -209,7 +209,7 @@ export default class Router {
       return '';
     }
 
-    return String(path).replace(/^#+\/+|^\/+#+|^\/+|^#+|\/+$|\?(.*)$/g, '');
+    return String(path).replace(/^[#\/]+|\/+$|\?.*$/g, '');
   }
 
   /**
