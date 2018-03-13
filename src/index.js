@@ -212,6 +212,11 @@ export default class Router {
     return String(path).replace(/^#+\/+|^\/+#+|^\/+|^#+|\/+$|\?(.*)$/g, '');
   }
 
+  /**
+   * Parse a route URL to get all parts
+   * @param {string} route Route to split into parts
+   * @returns {string[]} Parts of the URL
+   */
   static parseRoute(route) {
     return Router.cleanPath(route).split('/');
   }
