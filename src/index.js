@@ -1,3 +1,5 @@
+import 'custom-event-polyfill';
+
 const log = message => {
   console.log(
     `%c[Router]%c ${message}`,
@@ -170,7 +172,7 @@ export default class Router {
     );
 
     if (path !== 'error') {
-      window.dispatchEvent(new Event('hashchange'));
+      window.dispatchEvent(new CustomEvent('hashchange'));
     }
 
     return this;

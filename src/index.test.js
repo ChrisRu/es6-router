@@ -19,7 +19,7 @@ test('Simple routing setup event', () => {
   });
 
   window.history.pushState(null, null, '#/home');
-  window.dispatchEvent(new Event('hashchange'));
+  window.dispatchEvent(new CustomEvent('hashchange'));
 
   expect(i).toEqual(true);
 });
@@ -185,7 +185,7 @@ test('Stop listening', () => {
     value: '#/home'
   });
 
-  window.dispatchEvent(new Event('hashchange'));
+  window.dispatchEvent(new CustomEvent('hashchange'));
 
   expect(i).toEqual(1);
 
@@ -196,7 +196,7 @@ test('Stop listening', () => {
     value: '#/last'
   });
 
-  window.dispatchEvent(new Event('hashchange'));
+  window.dispatchEvent(new CustomEvent('hashchange'));
 
   expect(i).toEqual(1);
 });
@@ -214,7 +214,7 @@ test('Do not init listen on construct', () => {
     value: '#/'
   });
 
-  window.dispatchEvent(new Event('hashchange'));
+  window.dispatchEvent(new CustomEvent('hashchange'));
 
   expect(i).toEqual(0);
 
@@ -225,7 +225,7 @@ test('Do not init listen on construct', () => {
     value: '#/'
   });
 
-  window.dispatchEvent(new Event('hashchange'));
+  window.dispatchEvent(new CustomEvent('hashchange'));
 
   expect(i).toEqual(1);
 });
