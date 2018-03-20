@@ -1,6 +1,6 @@
 # ES6 Router
 
-A simple client side router built in ES6.
+A simple client side router built in ES6. This library works with IE11, because it ships a polyfill for custom events.
 
 ## Usage
 
@@ -37,7 +37,7 @@ router.navigate('about');
 
 Name of the current route
 
-*Returns*: <code>string</code> - Current route
+_Returns_: <code>string</code> - Current route
 
 <hr>
 
@@ -50,7 +50,7 @@ Add a new route
 | re      | <code>string</code> \| <code>RegExp</code> | Name of route to match               |
 | handler | <code>function</code>                      | Method to execute when route matches |
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -63,7 +63,7 @@ Remove a route from the routerc
 | re        | <code>string</code> \| <code>RegExp</code> | Name of route to remove    |
 | [handler] | <code>function</code>                      | Function handler to remove |
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -71,7 +71,7 @@ Remove a route from the routerc
 
 Reload the current route
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -79,7 +79,7 @@ Reload the current route
 
 Recheck the path and reload the page
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -91,7 +91,7 @@ Start listening for hash changes on the window
 | ---------- | ---------------- | ------------------- | ----------------------------- |
 | [instance] | <code>any</code> | <code>Window</code> | Context to start listening on |
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -103,7 +103,7 @@ Stop listening for hash changes on the window
 | ---------- | ---------------- | ------------------- | ---------------------------- |
 | [instance] | <code>any</code> | <code>Window</code> | Context to stop listening on |
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -115,7 +115,7 @@ Navigate router to path
 | ----- | ------------------- | ------------------------------ |
 | path  | <code>string</code> | Path to navigate the router to |
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -127,7 +127,7 @@ Navigate to the error page
 | ----- | ------------------- |
 | hash  | <code>string</code> |
 
-*Returns*: <code>Router</code> - This router instance
+_Returns_: <code>Router</code> - This router instance
 
 <hr>
 
@@ -139,7 +139,7 @@ Strip the path of slashes and hashes
 | ----- | ------------------- | ----------------------- |
 | path  | <code>string</code> | Path to clean of hashes |
 
-*Returns*: <code>string</code> - Cleaned path
+_Returns_: <code>string</code> - Cleaned path
 
 <hr>
 
@@ -151,7 +151,7 @@ Parse a route URL to get all parts
 | ----- | ------------------- | ------------------------- |
 | path  | <code>string</code> | Route to split into parts |
 
-*Returns*: <code>string[]</code> - Parts of the url
+_Returns_: <code>string[]</code> - Parts of the url
 
 ## License
 
