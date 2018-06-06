@@ -1,6 +1,6 @@
 {
   "name": "es6-router",
-  "version": "3.1.5",
+  "version": "3.1.6",
   "description": "Simple ES6 client side router",
   "main": "lib/index.js",
   "directories": {
