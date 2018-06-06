@@ -78,14 +78,6 @@ _Returns_: <code>Router</code> - This router instance
 
 <hr>
 
-#### check() ⇒ <code>Router</code>
-
-Recheck the path and reload the page
-
-_Returns_: <code>Router</code> - This router instance
-
-<hr>
-
 #### listen([instance]) ⇒ <code>Router</code>
 
 Start listening for hash changes on the window
