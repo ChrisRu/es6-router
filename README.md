@@ -1,6 +1,6 @@
 # ES6 Router
 
-[![Licence](https://img.shields.io/github/license/ChrisRu/es6-router.svg)](https://github.com/ChrisRu/vscode-nightsky)
+[![Licence](https://img.shields.io/github/license/ChrisRu/es6-router.svg)](https://github.com/ChrisRu/es6-router/blob/master/LICENSE.md)
 [![Tests](https://circleci.com/gh/circleci/mongofinil.svg?&style=shield&circle-token=b14acf911433d315298235b0c2fbf7b2670a92a8)](https://circleci.com/gh/ChrisRu/es6-router)
 
 A simple client side router built in ES6. This library works with IE11, because it ships a polyfill for custom events.
