@@ -1,4 +1,4 @@
-import Router from '../index';
+import Router from '../lib';
 
 test('Simple routing setup', () => {
   const router = new Router();
